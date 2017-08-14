@@ -1,8 +1,8 @@
-NAME = lem_in
+NAME = lem-in
 
 CFLAGS = -Wall -Wextra -Werror
 
-SRC = main.c validation.c
+SRC = main.c validation.c init.c libft/get_next_line.c
 
 OBJECTS = $(SRC:.c=.o)
 
@@ -17,7 +17,7 @@ $(NAME):  $(OBJECTS)
 	@echo "\033[34mLem in ready!\033[0m"
 
 %.o: %.c
-	@gcc -c $< $(CFLAGS) -o $@
+	@gcc -c $< -o $@
 
 $(LIB)libft.a:
 	@make -C $(LIB)

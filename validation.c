@@ -3,10 +3,10 @@
 
 void handle_rooms(t_room *rooms, t_info *pInfo);
 
-void add_handle_rooms(t_room *room, t_info *info, char *s);
+t_room *add_handle_rooms(t_room *room, t_info *info, char *s);
 
 
-t_room *lst_new(t_room *room, char *s);
+t_room *lst_new(t_room *room, char *s, t_info *pInfo);
 void check_digit(char *s);
 
 
@@ -19,7 +19,7 @@ void realloc_2d_array(t_info *info, char *line)
 	new = (char **)malloc(sizeof(char *) * (info->size + 2));
 	while (++i < info->size)
 		new[i] = info->file[i];
-	if(info->file != NULL)
+	if (info->file != NULL)
 		free(info->file);
 	new[info->size] = line;
 	new[info->size + 1] = NULL;
@@ -64,9 +64,8 @@ void validation(t_info *info)
 	t_room *rooms;
 
 	number_of_ants(info);
-	rooms = (t_room *)malloc(sizeof(t_room));
-	rooms->name = NULL;
 	handle_rooms(rooms, info);
+
 
 }
 
@@ -75,39 +74,52 @@ void handle_rooms(t_room *rooms, t_info *info)
 	char *line;
 
 	while (get_next_line(0, &line) > 0) {
-		if (line[0] == '#') {
-			if (ft_strcmp("##start", line) && info->s_e[0] == 0)
+		if (line[0] == '#')
+		{
+			if (!ft_strcmp("##start", line) && info->s_e[0] == 0)
 				info->s_e[0] = 1;
-			else if (ft_strcmp("##end", line) && info->s_e[0] == 0)
+			else if (!ft_strcmp("##end", line) && info->s_e[1] == 0)
 				info->s_e[1] = 1;
 			else if (line[1] == '#')
 				print_error("ERROR: wrong rule", &line);
-			if (info->s_e[0] && info->s_e[1])
-				print_error("ERROR: rule after rule", &line);
-
-			realloc_2d_array(info, line);
-
+			else if (info->s_e[0] == 1 || info->s_e[1] == 1)
+				print_error("ERROR: no room after rule", &line);
 		}
 		else
-			add_handle_rooms(rooms, info, line);
+			rooms = add_handle_rooms(rooms, info, line);
+		realloc_2d_array(info, line);
 		free(line);
 	}
 }
+
 //проверка на два пробела +
 //проверка на два числа +
 //проверка на комнату room co
 //проверку на кординаты
-//проверка на старт/конец
-//
-void add_handle_rooms(t_room *room, t_info *info, char *s)
-{
-	check_digit(s);
-	room = lst_new(room, s);
-	printf("%s %d %d \n", room->name, room->coord[0], room->coord[1]);
+//проверка на старт/конец +
+//записать комнату и коорды +
 
+t_room *add_handle_rooms(t_room *room, t_info *info, char *s)
+{
+//	t_room *test;
+
+	check_digit(s);
+	if (!info->room)
+	{
+		room = NULL;
+		info->room = 1;
+	}
+	room = lst_new(room, s, info);
+//	test = room;
+//	while(test != NULL)
+//	{
+//		printf("%s %d %d %d\n", test->name, test->coord[0], test->coord[1], test->coord[2]);
+//		test = test->next;
+//	}
+	return(room);
 }
 
-t_room *lst_new(t_room *room, char *s);
+t_room *lst_new(t_room *room, char *s, t_info *pInfo);
 
 void check_digit(char *s)
 {
@@ -134,26 +146,43 @@ void check_digit(char *s)
 		(ft_isdigit(s[i])) ? i++ : print_error("ERROR: invalid coord", &s);
 }
 
-t_room *lst_new(t_room *room, char *s)
+t_room *lst_cmp(t_room *r, t_room *new)
+{
+	while (r != NULL)
+	{
+		if(!ft_strcmp(r->name, new->name))
+			print_error("ERROR: same name", NULL);
+		if (new->coord[0] == r->coord[0] && new->coord[1] == r->coord[1])
+			print_error("ERROR: same coord", NULL);
+		r = r->next;
+	}
+
+}
+
+t_room *lst_new(t_room *room, char *s, t_info *pInfo)
 {
 	t_room *new;
 	char *tmp;
 
 	tmp = s;
+	new = (t_room *)malloc(sizeof(t_room));
 	while (*tmp != ' ')
 		tmp++;
-	if (room->name == NULL)
-		new = room;
-	else
-	{
-		new = (t_room *)malloc(sizeof(t_room));
-		new->next = room;
-	}
 	new->name = ft_strsub(s, 0, tmp - s);
 	new->coord[0] = ft_atoi(tmp);
 	tmp++;
 	while (*tmp != ' ')
 		tmp++;
 	new->coord[1] = ft_atoi(tmp);
-	return(new);
+	lst_cmp(room, new);
+	new->next = room;
+	new->coord[2] = 0;
+	if (pInfo->s_e[0] == 1)
+		new->coord[2] = pInfo->s_e[0]++;
+	else if (pInfo->s_e[1] == 1)
+	{
+		pInfo->s_e[1]++;
+		new->coord[2] = 3;
+	}
+	return (new);
 }

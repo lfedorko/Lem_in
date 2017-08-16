@@ -57,10 +57,9 @@ int			get_next_line(const int fd, char **line)
 	char		*new_buffer;
 	int			i;
 
-	add_buffer = NULL;
 	if (BUFF_SIZE <= 0 || fd < 0)
 		return (-1);
-	if (add_buffer != NULL && check_word(&add_buffer, line))
+	if (add_buffer!= NULL && check_word(&add_buffer, line))
 		return (1);
 	while ((i = read(fd, buffer, BUFF_SIZE)) > 0)
 	{

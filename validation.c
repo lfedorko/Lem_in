@@ -2,15 +2,12 @@
 #include "lem_in.h"
 
 void handle_rooms(t_room *rooms, t_info *pInfo, t_pointer *pPointer);
-
+void handle_path(t_room *room, t_pointer *p, char *s);
 t_room *add_handle_rooms(t_room *room, t_info *info, char *s, t_pointer *pPointer);
-
 void check_name(char *s, t_pointer *p);
-
 t_room *lst_new(t_room *room, char *s, t_pointer *p);
 void check_digit(char *s, t_pointer *pPointer);
 
-//1 general
 void realloc_2d_array(t_info *info, char *line)
 {
 	int 	i;
@@ -30,7 +27,6 @@ void realloc_2d_array(t_info *info, char *line)
 	free(line);
 }
 
-//2 ants
 void number_of_ants(t_info *info, t_pointer *p)
 {
 	char *line;
@@ -60,9 +56,6 @@ void number_of_ants(t_info *info, t_pointer *p)
 		print_error("ERROR: empty file", p);
 }
 
-
-void handle_path(t_room *room, t_pointer *p, char *s);
-//3 general
 void validation(t_info *info, t_pointer *p)
 {
 	t_room *rooms;
@@ -72,7 +65,6 @@ void validation(t_info *info, t_pointer *p)
 
 }
 
-// part 2
 void handle_rooms(t_room *rooms, t_info *info, t_pointer *p)
 {
 
@@ -102,7 +94,7 @@ void handle_rooms(t_room *rooms, t_info *info, t_pointer *p)
 	}
 	(info->s_e[0] != info->s_e[1]) ? print_error("ERROR: no start or end", p) : handle_path(rooms, p, line);
 }
-//part 2
+
 t_room *add_handle_rooms(t_room *room, t_info *info, char *s, t_pointer *p)
 {
 //	t_room *test;
@@ -121,7 +113,6 @@ t_room *add_handle_rooms(t_room *room, t_info *info, char *s, t_pointer *p)
 	return(room);
 }
 
-// general
 void check_digit(char *s, t_pointer *p)
 {
 	int i;
@@ -146,9 +137,9 @@ void check_digit(char *s, t_pointer *p)
 	while (s[i] != '\0')
 		(ft_isdigit(s[i])) ? i++ : print_error("ERROR: invalid coord", p);
 }
-//   part 2 - 3
+
 void lst_cmp(t_room *new, t_pointer *p);
-//8
+
 t_room *lst_new(t_room *room, char *s, t_pointer *p)
 {
 	t_room *new;
@@ -191,7 +182,6 @@ void lst_cmp(t_room *new, t_pointer *p)
 		}
 }
 
-//part 3
 void handle_path(t_room *room, t_pointer *p, char *s)
 {
 	char *tmp;
@@ -202,6 +192,9 @@ void handle_path(t_room *room, t_pointer *p, char *s)
 	while (get_next_line(0,&s) >0)
 	{
 		check_name(s, p);
+		//добавить штуки для обработки комментов и правил
+		//добавить матрицу смежности
+		// понять что происходит (логику)
 	}
 	printf("lalala");
 	i = 0;

@@ -5,8 +5,9 @@ void handle_rooms(t_room *rooms, t_info *pInfo, t_pointer *pPointer);
 
 t_room *add_handle_rooms(t_room *room, t_info *info, char *s, t_pointer *pPointer);
 
+void check_name(char *s, t_pointer *p);
 
-t_room *lst_new(t_room *room, char *s, t_info *pInfo, t_pointer *pPointer);
+t_room *lst_new(t_room *room, char *s, t_pointer *p);
 void check_digit(char *s, t_pointer *pPointer);
 
 //1 general
@@ -21,10 +22,12 @@ void realloc_2d_array(t_info *info, char *line)
 		new[i] = info->file[i];
 	if (info->file != NULL)
 		free(info->file);
-	new[info->size] = line;
+	new[info->size] = ft_strdup(line);
 	new[info->size + 1] = NULL;
 	info->file = new;
 	info->size++;
+	line = NULL;
+	free(line);
 }
 
 //2 ants
@@ -58,7 +61,7 @@ void number_of_ants(t_info *info, t_pointer *p)
 }
 
 
-void handle_path(t_room *room, t_info *info, t_pointer *p);
+void handle_path(t_room *room, t_pointer *p, char *s);
 //3 general
 void validation(t_info *info, t_pointer *p)
 {
@@ -66,20 +69,9 @@ void validation(t_info *info, t_pointer *p)
 
 	number_of_ants(info, p);
 	handle_rooms(rooms, info, p);
-	handle_path(rooms, info, p);
 
 }
-// уникальность комнат
-// уникальность соединений
-// проверка
-//
-//
-//
-//part 3
-void handle_path(t_room *room, t_info *info, t_pointer *p)
-{
 
-}
 // part 2
 void handle_rooms(t_room *rooms, t_info *info, t_pointer *p)
 {
@@ -108,10 +100,7 @@ void handle_rooms(t_room *rooms, t_info *info, t_pointer *p)
 		}
 		realloc_2d_array(info, line);
 	}
-	i = 0;
-	while (i < info->size)
-		printf("%s\n",info->file[i++]);
-	write(1, "opop",4);
+	(info->s_e[0] != info->s_e[1]) ? print_error("ERROR: no start or end", p) : handle_path(rooms, p, line);
 }
 //part 2
 t_room *add_handle_rooms(t_room *room, t_info *info, char *s, t_pointer *p)
@@ -121,17 +110,17 @@ t_room *add_handle_rooms(t_room *room, t_info *info, char *s, t_pointer *p)
 	check_digit(s, p);
 	if (!info->room)
 		room = NULL;
-	room = lst_new(room, s, info, p);
+	room = lst_new(room, s, p);
 //	test = room;
 //	while(test != NULL)
 //	{
 //		printf("%s %d %d %d\n", test->name, test->coord[0], test->coord[1], test->coord[2]);
 //		test = test->next;
 //	}
+	p->room = room;
 	return(room);
 }
 
-t_room *lst_new(t_room *room, char *s, t_info *pInfo, t_pointer *pPointer);
 // general
 void check_digit(char *s, t_pointer *p)
 {
@@ -158,9 +147,9 @@ void check_digit(char *s, t_pointer *p)
 		(ft_isdigit(s[i])) ? i++ : print_error("ERROR: invalid coord", p);
 }
 //   part 2 - 3
-void lst_cmp(t_room *r, t_room *new, t_pointer *p, int flag);
+void lst_cmp(t_room *new, t_pointer *p);
 //8
-t_room *lst_new(t_room *room, char *s, t_info *pInfo, t_pointer *p)
+t_room *lst_new(t_room *room, char *s, t_pointer *p)
 {
 	t_room *new;
 	char *tmp;
@@ -175,41 +164,74 @@ t_room *lst_new(t_room *room, char *s, t_info *pInfo, t_pointer *p)
 	while (*tmp != ' ')
 		tmp++;
 	new->coord[1] = ft_atoi(tmp);
-	lst_cmp(room, new, p, 0);
+	lst_cmp(new, p);
 	new->next = room;
 	new->coord[2] = 0;
-	if (pInfo->s_e[0] == 1)
-		new->coord[2] = pInfo->s_e[0]++;
-	else if (pInfo->s_e[1] == 1)
+	if (p->info->s_e[0] == 1)
+		new->coord[2] = p->info->s_e[0]++;
+	else if (p->info->s_e[1] == 1)
 	{
-		pInfo->s_e[1]++;
+		p->info->s_e[1]++;
 		new->coord[2] = 3;
 	}
-	pInfo->room++;
+	p->info->room++;
 	return (new);
 }
 
-void lst_cmp(t_room *r, t_room *new, t_pointer *p, int flag)
+void lst_cmp(t_room *new, t_pointer *p)
 {
-	if (!flag)
-	{
-		while (r != NULL)
+		while (p->room != NULL)
 		{
-			if(!ft_strcmp(r->name, new->name))
+			if(!ft_strcmp(p->room->name, new->name))
 				print_error("ERROR: same name", p);
-			if (new->coord[0] == r->coord[0] && new->coord[1] == r->coord[1])
+			if (new->coord[0] == p->room->coord[0]
+				&& new->coord[1] == p->room->coord[1])
 				print_error("ERROR: same coord",p);
-			r = r->next;
+			p->room = p->room->next;
 		}
-	}
-	else
-	{
-//		while (r != NULL)
-//		{
-//			if (ft_strcmp(r->name, room))
-		print_error("ERROR: invalid room", p);
-
-
-	}
 }
 
+//part 3
+void handle_path(t_room *room, t_pointer *p, char *s)
+{
+	char *tmp;
+	char *new;
+	int  i;
+
+	check_name(s, p);
+	while (get_next_line(0,&s) >0)
+	{
+		check_name(s, p);
+	}
+	printf("lalala");
+	i = 0;
+	while (i < p->info->size)
+		printf("%s\n",p->info->file[i++]);
+}
+
+void check_name(char *s, t_pointer *p)
+{
+	t_room 	*test;
+	int		count;
+	char	*tmp;
+	char 	*new;
+
+	count = 0;
+	tmp = s;
+	while (*tmp != '-')
+		tmp++;
+	new = ft_strsub(s, 0, tmp - s);
+	tmp++;
+	test = p->room;
+	while (test != NULL)
+	{
+		if (!ft_strcmp(new , test->name))
+			count++;
+		if (!ft_strcmp(tmp, test->name))
+			count++;
+		test = test->next;
+	}
+	if (count != 2)
+		print_error("ERROR: alien name", p);
+	realloc_2d_array(p->info, s);
+}

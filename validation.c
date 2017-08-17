@@ -9,7 +9,7 @@ t_room *add_handle_rooms(t_room *room, t_info *info, char *s, t_pointer *pPointe
 t_room *lst_new(t_room *room, char *s, t_info *pInfo, t_pointer *pPointer);
 void check_digit(char *s, t_pointer *pPointer);
 
-
+//1 general
 void realloc_2d_array(t_info *info, char *line)
 {
 	int 	i;
@@ -27,7 +27,7 @@ void realloc_2d_array(t_info *info, char *line)
 	info->size++;
 }
 
-
+//2 ants
 void number_of_ants(t_info *info, t_pointer *p)
 {
 	char *line;
@@ -52,7 +52,6 @@ void number_of_ants(t_info *info, t_pointer *p)
 				print_error("ERROR: incorrect amount of ants", p);
 		}
 		realloc_2d_array(info, line);
-		free(line);
 	}
 	if (line == NULL)
 		print_error("ERROR: empty file", p);
@@ -60,7 +59,7 @@ void number_of_ants(t_info *info, t_pointer *p)
 
 
 void handle_path(t_room *room, t_info *info, t_pointer *p);
-
+//3 general
 void validation(t_info *info, t_pointer *p)
 {
 	t_room *rooms;
@@ -76,15 +75,16 @@ void validation(t_info *info, t_pointer *p)
 //
 //
 //
-
+//part 3
 void handle_path(t_room *room, t_info *info, t_pointer *p)
 {
 
-
 }
-
+// part 2
 void handle_rooms(t_room *rooms, t_info *info, t_pointer *p)
 {
+
+	int  i;
 	char *line;
 
 	while (get_next_line(0, &line) > 0)
@@ -107,21 +107,20 @@ void handle_rooms(t_room *rooms, t_info *info, t_pointer *p)
 			rooms = add_handle_rooms(rooms, info, line, p);
 		}
 		realloc_2d_array(info, line);
-		free(line);
 	}
+	i = 0;
+	while (i < info->size)
+		printf("%s\n",info->file[i++]);
 	write(1, "opop",4);
 }
-
+//part 2
 t_room *add_handle_rooms(t_room *room, t_info *info, char *s, t_pointer *p)
 {
 //	t_room *test;
 
 	check_digit(s, p);
 	if (!info->room)
-	{
 		room = NULL;
-		info->room = 1;
-	}
 	room = lst_new(room, s, info, p);
 //	test = room;
 //	while(test != NULL)
@@ -133,7 +132,7 @@ t_room *add_handle_rooms(t_room *room, t_info *info, char *s, t_pointer *p)
 }
 
 t_room *lst_new(t_room *room, char *s, t_info *pInfo, t_pointer *pPointer);
-
+// general
 void check_digit(char *s, t_pointer *p)
 {
 	int i;
@@ -158,20 +157,9 @@ void check_digit(char *s, t_pointer *p)
 	while (s[i] != '\0')
 		(ft_isdigit(s[i])) ? i++ : print_error("ERROR: invalid coord", p);
 }
-
-void lst_cmp(t_room *r, t_room *new, t_pointer *p)
-{
-	while (r != NULL)
-	{
-		if(!ft_strcmp(r->name, new->name))
-			print_error("ERROR: same name", p);
-		if (new->coord[0] == r->coord[0] && new->coord[1] == r->coord[1])
-			print_error("ERROR: same coord",p);
-		r = r->next;
-	}
-
-}
-
+//   part 2 - 3
+void lst_cmp(t_room *r, t_room *new, t_pointer *p, int flag);
+//8
 t_room *lst_new(t_room *room, char *s, t_info *pInfo, t_pointer *p)
 {
 	t_room *new;
@@ -187,7 +175,7 @@ t_room *lst_new(t_room *room, char *s, t_info *pInfo, t_pointer *p)
 	while (*tmp != ' ')
 		tmp++;
 	new->coord[1] = ft_atoi(tmp);
-	lst_cmp(room, new, p);
+	lst_cmp(room, new, p, 0);
 	new->next = room;
 	new->coord[2] = 0;
 	if (pInfo->s_e[0] == 1)
@@ -197,5 +185,31 @@ t_room *lst_new(t_room *room, char *s, t_info *pInfo, t_pointer *p)
 		pInfo->s_e[1]++;
 		new->coord[2] = 3;
 	}
+	pInfo->room++;
 	return (new);
 }
+
+void lst_cmp(t_room *r, t_room *new, t_pointer *p, int flag)
+{
+	if (!flag)
+	{
+		while (r != NULL)
+		{
+			if(!ft_strcmp(r->name, new->name))
+				print_error("ERROR: same name", p);
+			if (new->coord[0] == r->coord[0] && new->coord[1] == r->coord[1])
+				print_error("ERROR: same coord",p);
+			r = r->next;
+		}
+	}
+	else
+	{
+//		while (r != NULL)
+//		{
+//			if (ft_strcmp(r->name, room))
+		print_error("ERROR: invalid room", p);
+
+
+	}
+}
+

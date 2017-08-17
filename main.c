@@ -3,9 +3,13 @@
 
 void print_error(char *string, t_pointer *p)
 {
+	int i;
 
+	i = 0;
 	write(1, string, ft_strlen(string));
 	free(p->line);
+	while (i < p->info->size)
+		free(p->info->file[i++]);
 	free(p->info);
 	/* add room  free linked list */
 	free(p);

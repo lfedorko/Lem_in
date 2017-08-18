@@ -2,7 +2,9 @@ NAME = lem-in
 
 CFLAGS = -Wall -Wextra -Werror
 
-SRC = main.c validation.c init.c libft/get_next_line.c
+SRC = main.c handle_ants.c init.c libft/get_next_line.c \
+	handle_rooms.c \
+	handle_path.c
 
 OBJECTS = $(SRC:.c=.o)
 

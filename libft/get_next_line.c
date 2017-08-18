@@ -10,7 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <printf.h>
 #include "get_next_line.h"
 
 static int	check_end(char *add_buffer, char **line)

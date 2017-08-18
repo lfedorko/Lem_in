@@ -68,8 +68,7 @@ set(SOURCE_FILES
         libft/get_next_line.h
         lem_in.h
         main.c
-        ft_printf.h
-        validation.c
-        init.c)
+        handle_ants.c
+        init.c handle_path.c handle_rooms.c)
 
 add_executable(lem_in ${SOURCE_FILES})

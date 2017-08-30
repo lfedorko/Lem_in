@@ -5,45 +5,45 @@
 2 2 0
 #djskjfe
 3 3 0
-#fsklke
-##hehnjs
+#sklke
+#hehnjs
 4 4 0
 #dkeknf
 5 5 0
-##hykjhu
+#hykjhu
 6 6 0
-##fjksen
+#fjksen
 7 7 0
 #fehjkwf
 8 8 0
-##nhjkshakwffedsfhjekshfeuilylwhejbckushjfdheiusahfnjkeysacuhnajkryefcoaihne
+#nhjkshakwffedsfhjekshfeuilylwhejbckushjfdheiusahfnjkeysacuhnajkryefcoaihne
 #hegwi3ubc
-##dhewklhekejjbckelgekj
+#dhewklhekejjbckelgekj
 #fhejsehwfk
 9 9 0
-##ghj7tgd387ye3b 38y3e 83y3
+#ghj7tgd387ye3b 38y3e 83y3
 10 10 0
-##387294y9264372  4983902840 jfklew33n
+#387294y9264372  4983902840 jfklew33n
 11 11 0
 #hfouwhenjdeiwhdoyh3nn
 12 12 0
 ##end
 13 13 0
-##djklw[ujdm
+#djklw[ujdm
 1-2
-##odlejmwkldj9oiekw == == == =
+#odlejmwkldj9oiekw == == == =
 1-3
 #dniuwh3kjn
 1-4
 #jghdbk,aemni;
-1-5
+1- 5
 1-6
 1-7
 #dkhwuihbbb  husdw hdw iij
 1-8
 #jdiuwhn
 1-9
-##ndiqhnjjd
+#ndiqhnjjd
 1-10
 #hdkhaej
 1-11
@@ -57,11 +57,11 @@
 2-6
 #kjdfklshfglke
 2-7
-##
+#ded
 2-8
-##    
+#e
 2-9
-#
+#dd
 2-10
 2-11
 2-12
@@ -74,7 +74,7 @@
 #lksjfl;j jfklsjeo;
 3-9
 3-10
-##fjksl;jeif kof;ekowfe
+#
 3-11
 3-12
 3-13
@@ -95,7 +95,7 @@
 5-10
 5-11
 5-12
-##jelwj4iofnkw
+#jelwj4iofnkw
 5-13
 6-7
 6-8

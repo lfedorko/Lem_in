@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include "lem_in.h"
 
+
+
 void print_error(char *string, t_pointer *p)
 {
 	int i;
@@ -28,7 +30,12 @@ int main()
 	p->info = info;
 	init_info(info, p);
 	validation(info, p);
+	find_paths(info, p);
 	free(info);
 
 	return (0);
+}
+
+void find_paths(t_info *info, t_pointer *p) {
+
 }

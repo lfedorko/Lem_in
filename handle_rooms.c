@@ -29,8 +29,10 @@ t_room	*lst_new(t_room *room, char *s, t_pointer *p)
 {
 	t_room	*new;
 	char	*tmp;
+	t_room *head;
 
 	tmp = s;
+	head = room;
 	new = (t_room *)malloc(sizeof(t_room));
 	while (*tmp != ' ')
 		tmp++;
@@ -41,17 +43,25 @@ t_room	*lst_new(t_room *room, char *s, t_pointer *p)
 		tmp++;
 	new->coord[1] = ft_atoi(tmp);
 	lst_cmp(new, p);
-	new->next = room;
-	new->coord[2] = 0;
-	if (p->info->s_e[0] == 1)
-		new->coord[2] = p->info->s_e[0]++;
-	else if (p->info->s_e[1] == 1)
+	new->next = NULL;
+	if (p->info->s_e[0] == 1 || p->info->s_e[1] == 1)
 	{
-		p->info->s_e[1]++;
-		new->coord[2] = 3;
+		(p->info->s_e[0] == 1) ? (new->coord[2] = 1) : (new->coord[2] = 2);
+		(p->info->s_e[0] == 1) ? (p->info->s_e[0] = 2) : (p->info->s_e[1] = 2);
+		new->next = room;
+		printf("dedw");
+		return (new);
+
 	}
-	p->info->room++;
-	return (new);
+	printf("chains\n");
+	if (room == NULL)
+		return (new);
+	while (room->next != NULL)
+		room = room->next;
+	printf("chains\n");
+	room->next = new;
+	new->coord[2] = 0;
+	return (head);
 }
 
 void	check_digit(char *s, t_pointer *p)
@@ -86,6 +96,7 @@ t_room	*add_handle_rooms(t_room *room, t_info *info, char *s, t_pointer *p)
 		room = NULL;
 	room = lst_new(room, s, p);
 	p->room = room;
+	p->info->room++;
 	return (room);
 }
 

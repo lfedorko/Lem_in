@@ -49,16 +49,13 @@ t_room	*lst_new(t_room *room, char *s, t_pointer *p)
 		(p->info->s_e[0] == 1) ? (new->coord[2] = 1) : (new->coord[2] = 2);
 		(p->info->s_e[0] == 1) ? (p->info->s_e[0] = 2) : (p->info->s_e[1] = 2);
 		new->next = room;
-		printf("dedw");
 		return (new);
 
 	}
-	printf("chains\n");
 	if (room == NULL)
 		return (new);
 	while (room->next != NULL)
 		room = room->next;
-	printf("chains\n");
 	room->next = new;
 	new->coord[2] = 0;
 	return (head);

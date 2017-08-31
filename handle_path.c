@@ -13,9 +13,11 @@
 #include "lem_in.h"
 
 //матрица выводится
-//первая комната - последняя комната
+//первая комната - старт ,вторая -енд
 //освободить память в функции принт_ерор
-//проверить валидацию окончательно
+//проверить валидацию окончательно!!!
+
+void create_map(t_pointer *p);
 
 void print_results(t_pointer *p) {
 	t_room *room;
@@ -68,15 +70,7 @@ void	handle_path(t_room *room, t_pointer *p, char *s)
 {
 	int		i;
 
-	i = 0;
-	p->info->map = (char **)malloc(sizeof(char *) * p->info->room + 1);
-	p->info->map[p->info->room] = NULL;
-	while(i < p->info->room)
-	{
-		p->info->map[i] = ft_strnew(p->info->room);
-		ft_memset(p->info->map[i],'0',p->info->room);
-		i++;
-	}
+	create_map(p);
 	check_name(s, p);
 	while (get_next_line(0, &s) > 0)
 	{
@@ -89,9 +83,32 @@ void	handle_path(t_room *room, t_pointer *p, char *s)
 			check_name(s, p);
 		realloc_2d_array(p->info, s);
 	}
-	printf("lalala\n");
 	i = 0;
 	while (i < p->info->size)
 		printf("%s\n", p->info->file[i++]);
 	print_results(p);
+}
+
+void create_map(t_pointer *p)
+{
+	t_room	*second;
+	int 	i;
+
+	i = 0;
+	p->info->map = (char **)malloc(sizeof(char *) * p->info->room + 1);
+	p->info->map[p->info->room] = NULL;
+	while(i < p->info->room)
+	{
+		p->info->map[i] = ft_strnew(p->info->room);
+		ft_memset(p->info->map[i], '0',p->info->room);
+		i++;
+	}
+	if (p->room->coord[2] == 2)
+	{
+		second = p->room->next;
+		p->room->next = second->next;
+		second->next = p->room;
+		p->room = second;
+	}
+
 }

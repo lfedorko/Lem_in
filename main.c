@@ -30,12 +30,8 @@ int main()
 	p->info = info;
 	init_info(info, p);
 	validation(info, p);
-	find_paths(info, p);
+	find_paths(p);
 	free(info);
 
 	return (0);
-}
-
-void find_paths(t_info *info, t_pointer *p) {
-
 }

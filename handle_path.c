@@ -64,6 +64,7 @@ void	check_name(char *s, t_pointer *p)
 	if (counter[0] == -1 || counter[1] == -1)
 		print_error("ERROR: incorrect connections", p);
 	p->info->map[counter[0]][counter[1]] = 'X';
+	p->info->map[counter[1]][counter[0]] = 'X';
 }
 
 void	handle_path(t_room *room, t_pointer *p, char *s)
@@ -72,6 +73,7 @@ void	handle_path(t_room *room, t_pointer *p, char *s)
 
 	create_map(p);
 	check_name(s, p);
+	realloc_2d_array(p->info,s);
 	while (get_next_line(0, &s) > 0)
 	{
 		if (s[0] == '#')
@@ -88,7 +90,7 @@ void	handle_path(t_room *room, t_pointer *p, char *s)
 		printf("%s\n", p->info->file[i++]);
 	print_results(p);
 }
-
+//map of distance
 void create_map(t_pointer *p)
 {
 	t_room	*second;

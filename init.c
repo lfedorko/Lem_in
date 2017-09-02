@@ -13,6 +13,7 @@ void init_info(t_info *info, t_pointer *p)
 	info->size = 0;
 	info->room = 0;
 	info->file = NULL;
+	info->file = NULL;
 	p->info = info;
 	p->room = NULL;
 	p->line = NULL;

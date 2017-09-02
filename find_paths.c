@@ -8,12 +8,13 @@ void add_vertex(int i, int *p, int len)
 	while (p[j] != 0 && j < len)
 		j++;
 	p[j] = i;
+	printf("vertex\n");
 }
 // вертекс- что добавить
 // массив с предыдущей дорогой
 
 
-int *new_path(t_pointer *p, int vertex, int *cur_road)
+int *new_path(t_pointer *p, int vertex, int *cur_road, int cur)
 {
 	t_path *new;
 	t_path *tmp;
@@ -21,18 +22,24 @@ int *new_path(t_pointer *p, int vertex, int *cur_road)
 
 	i = 0;
 	tmp = p->path;
+	printf("cur road  ");
+	while (i < p->info->room)
+		printf("%d ", cur_road[i++]);
+	printf("\n");
+	i = 0;
 	new = (t_path *)malloc(sizeof(t_path));
 	new->road = (int *)ft_memalloc(sizeof(int) * p->info->room);
 	new->next = NULL;
 	while (tmp->next != NULL)
 		tmp = tmp->next;
 	tmp->next = new;  // новый узел с дорогой
-	while (cur_road[i] != 0 && i < p->info->room)
+	while (cur_road[i] != cur && i < p->info->room)
 	{
-		new->road[i] = cur_road[i];
 		i++;
+		new->road[i] = cur_road[i];
 	}
 	new->road[i] = vertex;
+	printf("non vertex\n");
 	return (new->road);
 }
 
@@ -47,21 +54,25 @@ void dfs(int start, int end, char *used, t_pointer *p, int *j)
 	if (start == end)
 		return ;
 	used[start] = '1';
-	printf("%s\n",used);
+	printf("%s ",used);
+	while (i < p->info->room)
+		printf("%d ", j[i++]);
+	printf("-------------\n");
+	i = 0;
 	while (i < p->info->room)
 	{
-		if (p->info->map[start][i] == 'X'  &&  used[i] == '0')
-		{
-			if (path == 0)
-				add_vertex(i, j, p->info->room);
-			else
-				j = new_path(p, i, j);
-			dfs(i, end, used, p, j);
-			path++;
-		}
+			if (p->info->map[start][i] == 'X'  &&  used[i] == '0')
+			{
+				if (path == 0)
+					add_vertex(i, j, p->info->room);
+				else
+					j = new_path(p, i, j, start);
+				dfs(i, end, used, p, j);
+				path++;
+			}
 			i++;
 	}
-	//used[start] = '0';
+	used[start] = '0';
 }
 
 void find_paths(t_pointer *p)

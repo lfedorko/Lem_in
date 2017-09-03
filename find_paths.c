@@ -1,5 +1,23 @@
 #include "lem_in.h"
 
+void sort_roads(t_pointer *p)
+{
+	t_path *tmp;
+	int	i;
+
+	tmp = p->path;
+	while (tmp)
+	{
+		i = 0;
+		while (tmp->road[i] != 0)
+			i++;
+		//if (tmp->road[i - 1] != 1)
+		//
+		tmp->len = i;
+		tmp = tmp->next;
+	}
+}
+
 void add_vertex(int i, int *p, int len)
 {
 	int j;
@@ -8,11 +26,6 @@ void add_vertex(int i, int *p, int len)
 	while (p[j] != 0 && j < len)
 		j++;
 	p[j] = i;
-	printf("vertex\n");
-	i = 0;
-	while (i < len)
-		printf("%d ", p[i++]);
-	printf("\n");
 }
 // вертекс- что добавить
 // массив с предыдущей дорогой
@@ -24,12 +37,7 @@ int *new_path(t_pointer *p, int vertex, int *cur_road, int cur)
 	t_path *tmp;
 	int i;
 
-	i = 0;
 	tmp = p->path;
-	printf("cur road  ");
-	while (i < p->info->room)
-		printf("%d ", cur_road[i++]);
-	printf("\n");
 	i = 0;
 	new = (t_path *)malloc(sizeof(t_path));
 	new->road = (int *)ft_memalloc(sizeof(int) * p->info->room);
@@ -60,7 +68,6 @@ void dfs(int start, int end, char *used, t_pointer *p, int *j)
 	int k;
 
 	path = 0;
-	i = 0;
 	if (start == end)
 		return ;
 	used[start] = '1';
@@ -86,6 +93,7 @@ void find_paths(t_pointer *p)
 	char *used;
 	t_path *path;
 	int i = 0;
+	t_path *tmp;
 
 	path = (t_path *)malloc(sizeof(t_path));
 	path->road = (int *)ft_memalloc(sizeof(int) * p->info->room);
@@ -95,13 +103,25 @@ void find_paths(t_pointer *p)
 	used = memset(used, '0', p->info->room);
 	dfs(0, 1, used, p, path->road);//дописать массив с путями
 
-	while (path != NULL)
+	printf("ALL ROADS:\n");
+	tmp = path;
+	while (tmp != NULL)
 	{
 		i = -1;
-		while (++i < p->info->room)
-			printf("%d", path->road[i]);
+		while (++i < p->info->room && tmp->road[i] != 0)
+			printf("%d", tmp->road[i]);
 		printf("\n");
-		path = path->next;
+		tmp = tmp->next;
 	}
-
+	printf("SORT ROADS\n");
+	sort_roads(p);
+	tmp = p->path;
+	while (tmp != NULL)
+	{
+		i = -1;
+		while (++i < p->info->room && tmp->road[i] != 0)
+			printf("%d", tmp->road[i]);
+		printf("   len = %d \n", tmp->len);
+		tmp = tmp->next;
+	}
 }

@@ -33,14 +33,14 @@ int *new_path(t_pointer *p, int vertex, int *cur_road, int cur)
 	while (tmp->next != NULL)
 		tmp = tmp->next;
 	tmp->next = new;  // новый узел с дорогой
-	while (cur_road[i] != cur && i < p->info->room)
+	while (cur_road[i] != cur && i < p->info->room) //problem
 	{
-		i++;
 		new->road[i] = cur_road[i];
+		i++;
 	}
-	new->road[i] = vertex;
-	printf("non vertex\n");
-	return (new->road);
+	new->road[i] = cur_road[i];
+	new->road[i + 1] = vertex;
+	return(new->road);
 }
 
 
@@ -54,10 +54,6 @@ void dfs(int start, int end, char *used, t_pointer *p, int *j)
 	if (start == end)
 		return ;
 	used[start] = '1';
-	printf("%s ",used);
-	while (i < p->info->room)
-		printf("%d ", j[i++]);
-	printf("-------------\n");
 	i = 0;
 	while (i < p->info->room)
 	{
@@ -66,7 +62,7 @@ void dfs(int start, int end, char *used, t_pointer *p, int *j)
 				if (path == 0)
 					add_vertex(i, j, p->info->room);
 				else
-					j = new_path(p, i, j, start);
+					j = new_path(p, i,  j, start);
 				dfs(i, end, used, p, j);
 				path++;
 			}
@@ -89,7 +85,7 @@ void find_paths(t_pointer *p)
 	used = memset(used, '0', p->info->room);
 	dfs(0, 1, used, p, path->road);//дописать массив с путями
 
-	while (path != NULL) {
+	while (path->next != NULL) {
 		i = 0;
 		while (i < p->info->room)
 			printf("%d", path->road[i++]);

@@ -9,6 +9,10 @@ void add_vertex(int i, int *p, int len)
 		j++;
 	p[j] = i;
 	printf("vertex\n");
+	i = 0;
+	while (i < len)
+		printf("%d ", p[i++]);
+	printf("\n");
 }
 // вертекс- что добавить
 // массив с предыдущей дорогой
@@ -53,6 +57,7 @@ void dfs(int start, int end, char *used, t_pointer *p, int *j)
 {
 	int i;
 	int path;
+	int k;
 
 	path = 0;
 	i = 0;
@@ -90,10 +95,11 @@ void find_paths(t_pointer *p)
 	used = memset(used, '0', p->info->room);
 	dfs(0, 1, used, p, path->road);//дописать массив с путями
 
-	while (path->next != NULL) {
-		i = 0;
-		while (i < p->info->room)
-			printf("%d", path->road[i++]);
+	while (path != NULL)
+	{
+		i = -1;
+		while (++i < p->info->room)
+			printf("%d", path->road[i]);
 		printf("\n");
 		path = path->next;
 	}

@@ -1,8 +1,6 @@
 #include <stdio.h>
 #include "lem_in.h"
 
-
-
 void print_error(char *string, t_pointer *p)
 {
 	int i;

@@ -38,6 +38,7 @@ void	number_of_ants(t_info *info, t_pointer *p)
 
 	line = NULL;
 	i = 0;
+	p->line = line;
 	while (info->ants == 0 && get_next_line(0, &line) > 0)
 	{
 		if (line[0] == '#')

@@ -33,6 +33,11 @@ int *new_path(t_pointer *p, int vertex, int *cur_road, int cur)
 	while (tmp->next != NULL)
 		tmp = tmp->next;
 	tmp->next = new;  // новый узел с дорогой
+	if (cur == 0)
+	{
+		new->road[0] = vertex;
+		return (new->road);
+	}
 	while (cur_road[i] != cur && i < p->info->room) //problem
 	{
 		new->road[i] = cur_road[i];

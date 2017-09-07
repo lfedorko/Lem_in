@@ -2,19 +2,34 @@
 
 void sort_roads(t_pointer *p)
 {
+	t_path *list;
 	t_path *tmp;
-	int	i;
+	t_path *prev; //cтарый
+	int i;
 
-	tmp = p->path;
-	while (tmp)
+	prev = NULL;
+	list = p->path;
+	while (list)
 	{
+		tmp = list->next;
 		i = 0;
-		while (tmp->road[i] != 0)
+		while (list->road[i] != 1 && i < p->info->room)
 			i++;
-		//if (tmp->road[i - 1] != 1)
-		//
-		tmp->len = i;
-		tmp = tmp->next;
+		if (list->road[i] != 1)
+		{
+			if (prev == NULL)
+				p->path = tmp;
+		  	else
+				prev->next = tmp;
+			free(list->road);
+			free(list);
+		}
+		else
+		{
+			prev = list;
+			list->len = i;
+		}
+			list = tmp;
 	}
 }
 
@@ -65,7 +80,6 @@ void dfs(int start, int end, char *used, t_pointer *p, int *j)
 {
 	int i;
 	int path;
-	int k;
 
 	path = 0;
 	if (start == end)
@@ -87,7 +101,7 @@ void dfs(int start, int end, char *used, t_pointer *p, int *j)
 	}
 	used[start] = '0';
 }
-
+//used malloc -free !!!
 void find_paths(t_pointer *p)
 {
 	char *used;
@@ -110,7 +124,7 @@ void find_paths(t_pointer *p)
 		i = -1;
 		while (++i < p->info->room && tmp->road[i] != 0)
 			printf("%d", tmp->road[i]);
-		printf("\n");
+		printf("   len = %d  cur = %p next = %p\n", tmp->len, &tmp, &tmp->next);
 		tmp = tmp->next;
 	}
 	printf("SORT ROADS\n");
@@ -121,7 +135,7 @@ void find_paths(t_pointer *p)
 		i = -1;
 		while (++i < p->info->room && tmp->road[i] != 0)
 			printf("%d", tmp->road[i]);
-		printf("   len = %d \n", tmp->len);
+		printf("   len = %d  cur = %p next = %p\n", tmp->len, &tmp, &tmp->next);
 		tmp = tmp->next;
 	}
 }

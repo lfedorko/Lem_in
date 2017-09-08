@@ -9,28 +9,60 @@ void sort_roads(t_pointer *p)
 
 	prev = NULL;
 	list = p->path;
-	while (list)
-	{
+	while (list) {
 		tmp = list->next;
 		i = 0;
 		while (list->road[i] != 1 && i < p->info->room)
 			i++;
-		if (list->road[i] != 1)
-		{
+		if (list->road[i] != 1) {
 			if (prev == NULL)
 				p->path = tmp;
-		  	else
+			else
 				prev->next = tmp;
 			free(list->road);
 			free(list);
-		}
-		else
-		{
+		} else {
 			prev = list;
 			list->len = i;
 		}
-			list = tmp;
+		list = tmp;
 	}
+}
+
+void sort_litlebig(t_pointer *p)
+{
+	t_path *begin;
+	t_path *tmp;
+	int *array;
+	int tmp_len;
+
+	begin = p->path;
+	tmp  = p->path->next;
+	while (tmp)
+	{
+		while (tmp != begin)
+		{
+			if (tmp->len < begin->len)
+			{
+				tmp_len = begin->len;
+				array = begin->road;
+				begin->len = tmp->len;
+				begin->road = tmp->road;
+				tmp->road = array;
+				tmp->len = tmp_len;
+			}
+			begin = begin->next;
+		}
+		begin = p->path;
+		tmp = tmp->next;
+	}
+}
+//непересекающиеся пути
+void sort_unique_roads(t_pointer *p, char *used)
+{
+
+
+
 }
 
 void add_vertex(int i, int *p, int len)
@@ -42,9 +74,6 @@ void add_vertex(int i, int *p, int len)
 		j++;
 	p[j] = i;
 }
-// вертекс- что добавить
-// массив с предыдущей дорогой
-
 
 int *new_path(t_pointer *p, int vertex, int *cur_road, int cur)
 {
@@ -101,6 +130,7 @@ void dfs(int start, int end, char *used, t_pointer *p, int *j)
 	}
 	used[start] = '0';
 }
+
 //used malloc -free !!!
 void find_paths(t_pointer *p)
 {
@@ -124,10 +154,10 @@ void find_paths(t_pointer *p)
 		i = -1;
 		while (++i < p->info->room && tmp->road[i] != 0)
 			printf("%d", tmp->road[i]);
-		printf("   len = %d  cur = %p next = %p\n", tmp->len, &tmp, &tmp->next);
+		printf("   len = %d \n", tmp->len);
 		tmp = tmp->next;
 	}
-	printf("SORT ROADS\n");
+	printf("DELETE UNUSED WAYS FROM THE LIST OF ROADS\n");
 	sort_roads(p);
 	tmp = p->path;
 	while (tmp != NULL)
@@ -135,7 +165,20 @@ void find_paths(t_pointer *p)
 		i = -1;
 		while (++i < p->info->room && tmp->road[i] != 0)
 			printf("%d", tmp->road[i]);
-		printf("   len = %d  cur = %p next = %p\n", tmp->len, &tmp, &tmp->next);
+		printf("   len = %d\n", tmp->len);
 		tmp = tmp->next;
 	}
+	printf("used = %s\n", used);
+	printf("SORT LITTLE BIG ROADS\n");
+	sort_litlebig(p);
+	tmp = p->path;
+	while (tmp != NULL)
+	{
+		i = -1;
+		while (++i < p->info->room && tmp->road[i] != 0)
+			printf("%d", tmp->road[i]);
+		printf("   len = %d\n", tmp->len);
+		tmp = tmp->next;
+	}
+	free(used);
 }

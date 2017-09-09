@@ -1,6 +1,23 @@
 #include "lem_in.h"
 
 
+
+void print_lists(t_pointer *p)
+{
+	t_path *tmp;
+	int i;
+
+	tmp = p->path;
+	while (tmp != NULL)
+	{
+		i = -1;
+		while (++i < p->info->room && tmp->road[i] != 0)
+			printf("%d", tmp->road[i]);
+		printf("\n");
+		tmp = tmp->next;
+	}
+}
+
 void sort_litlebig(t_pointer *p)
 {
 	t_path *begin;
@@ -143,37 +160,16 @@ void find_paths(t_pointer *p)
 	path->next = NULL;
 	used = memset(used, '0', p->info->room);
 	dfs(0, 1, used, p, path->road);//дописать массив с путями
-
+	if (path->road[0] == 0)
+		print_error("ERROR: no roads", p);
 	printf("ALL ROADS:\n");
-	tmp = path;
-	while (tmp != NULL)
-	{
-		i = -1;
-		while (++i < p->info->room && tmp->road[i] != 0)
-			printf("%d", tmp->road[i]);
-		printf("\n");
-		tmp = tmp->next;
-	}
+	print_lists(p);
 	printf("SORT ROADS\n");
 	sort_roads(p);
-	tmp = p->path;
-	while (tmp != NULL)
-	{
-		i = -1;
-		while (++i < p->info->room && tmp->road[i] != 0)
-			printf("%d", tmp->road[i]);
-		printf("   len = %d \n", tmp->len);
-		tmp = tmp->next;
-	}
+	if (p->path == NULL)
+		print_error("ERROR: no connected roads", p);
+	print_lists(p);
 	printf("SORT little big ROADS\n");
 	sort_litlebig(p);
-	tmp = p->path;
-	while (tmp != NULL)
-	{
-		i = -1;
-		while (++i < p->info->room && tmp->road[i] != 0)
-			printf("%d", tmp->road[i]);
-		printf("   len = %d \n", tmp->len);
-		tmp = tmp->next;
-	}
+	print_lists(p);
 }

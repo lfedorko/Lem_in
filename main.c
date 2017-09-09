@@ -7,7 +7,8 @@ void print_error(char *string, t_pointer *p)
 
 	i = 0;
 	write(1, string, ft_strlen(string));
-	free(p->line);
+	if (p->line != NULL)
+		free(p->line);
 	while (i < p->info->size)
 		free(p->info->file[i++]);
 	free(p->info);

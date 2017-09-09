@@ -80,11 +80,9 @@ void	handle_path(t_room *room, t_pointer *p, char *s)
 		{
 			if (!ft_strncmp("##", s, 2))
 				print_error("ERROR: rule", p);
-			printf("deo");
 		}
 		else
 			check_name(s, p);
-		printf("%s\n",s);
 		realloc_2d_array(p->info, s);
 	}
 	i = 0;

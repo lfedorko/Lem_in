@@ -21,6 +21,7 @@ int main()
 {
 	// init structure
 	t_info *info;
+	//t_room *room;
 	t_pointer *p;
 	p = (t_pointer *)malloc(sizeof(t_pointer));
 	info = (t_info *)malloc(sizeof(t_info));

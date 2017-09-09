@@ -1,33 +1,5 @@
 #include "lem_in.h"
 
-void sort_roads(t_pointer *p)
-{
-	t_path *list;
-	t_path *tmp;
-	t_path *prev; //cтарый
-	int i;
-
-	prev = NULL;
-	list = p->path;
-	while (list) {
-		tmp = list->next;
-		i = 0;
-		while (list->road[i] != 1 && i < p->info->room)
-			i++;
-		if (list->road[i] != 1) {
-			if (prev == NULL)
-				p->path = tmp;
-			else
-				prev->next = tmp;
-			free(list->road);
-			free(list);
-		} else {
-			prev = list;
-			list->len = i;
-		}
-		list = tmp;
-	}
-}
 
 void sort_litlebig(t_pointer *p)
 {
@@ -57,12 +29,34 @@ void sort_litlebig(t_pointer *p)
 		tmp = tmp->next;
 	}
 }
-//непересекающиеся пути
-void sort_unique_roads(t_pointer *p, char *used)
+
+void sort_roads(t_pointer *p)
 {
+	t_path *list;
+	t_path *tmp;
+	t_path *prev; //cтарый
+	int i;
 
-
-
+	prev = NULL;
+	list = p->path;
+	while (list) {
+		tmp = list->next;
+		i = 0;
+		while (list->road[i] != 1 && i < p->info->room)
+			i++;
+		if (list->road[i] != 1) {
+			if (prev == NULL)
+				p->path = tmp;
+			else
+				prev->next = tmp;
+			free(list->road);
+			free(list);
+		} else {
+			prev = list;
+			list->len = i;
+		}
+		list = tmp;
+	}
 }
 
 void add_vertex(int i, int *p, int len)
@@ -74,6 +68,9 @@ void add_vertex(int i, int *p, int len)
 		j++;
 	p[j] = i;
 }
+// вертекс- что добавить
+// массив с предыдущей дорогой
+
 
 int *new_path(t_pointer *p, int vertex, int *cur_road, int cur)
 {
@@ -109,6 +106,7 @@ void dfs(int start, int end, char *used, t_pointer *p, int *j)
 {
 	int i;
 	int path;
+	int k;
 
 	path = 0;
 	if (start == end)
@@ -131,7 +129,6 @@ void dfs(int start, int end, char *used, t_pointer *p, int *j)
 	used[start] = '0';
 }
 
-//used malloc -free !!!
 void find_paths(t_pointer *p)
 {
 	char *used;
@@ -154,10 +151,10 @@ void find_paths(t_pointer *p)
 		i = -1;
 		while (++i < p->info->room && tmp->road[i] != 0)
 			printf("%d", tmp->road[i]);
-		printf("   len = %d \n", tmp->len);
+		printf("\n");
 		tmp = tmp->next;
 	}
-	printf("DELETE UNUSED WAYS FROM THE LIST OF ROADS\n");
+	printf("SORT ROADS\n");
 	sort_roads(p);
 	tmp = p->path;
 	while (tmp != NULL)
@@ -165,11 +162,10 @@ void find_paths(t_pointer *p)
 		i = -1;
 		while (++i < p->info->room && tmp->road[i] != 0)
 			printf("%d", tmp->road[i]);
-		printf("   len = %d\n", tmp->len);
+		printf("   len = %d \n", tmp->len);
 		tmp = tmp->next;
 	}
-	printf("used = %s\n", used);
-	printf("SORT LITTLE BIG ROADS\n");
+	printf("SORT little big ROADS\n");
 	sort_litlebig(p);
 	tmp = p->path;
 	while (tmp != NULL)
@@ -177,8 +173,7 @@ void find_paths(t_pointer *p)
 		i = -1;
 		while (++i < p->info->room && tmp->road[i] != 0)
 			printf("%d", tmp->road[i]);
-		printf("   len = %d\n", tmp->len);
+		printf("   len = %d \n", tmp->len);
 		tmp = tmp->next;
 	}
-	free(used);
 }

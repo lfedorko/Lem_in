@@ -50,7 +50,6 @@ t_room	*lst_new(t_room *room, char *s, t_pointer *p)
 		(p->info->s_e[0] == 1) ? (p->info->s_e[0] = 2) : (p->info->s_e[1] = 2);
 		new->next = room;
 		return (new);
-
 	}
 	if (room == NULL)
 		return (new);
@@ -101,7 +100,7 @@ void	handle_rooms(t_room *rooms, t_info *info, t_pointer *p)
 {
 	char	*line;
 
-	p->line = line;
+	//p->line = line;
 	while (get_next_line(0, &line) > 0)
 	{
 		if (strchr(line, ' ') == NULL && strchr(line, '-') != NULL)

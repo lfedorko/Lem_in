@@ -5,7 +5,9 @@ CFLAGS = -Wall -Wextra -Werror
 SRC = main.c handle_ants.c init.c libft/get_next_line.c \
 	handle_rooms.c \
 	handle_path.c \
-	find_paths.c
+	find_paths.c \
+	dfs.c \
+	sort_list_of_paths.c
 
 OBJECTS = $(SRC:.c=.o)
 

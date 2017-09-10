@@ -12,12 +12,6 @@
 
 #include "lem_in.h"
 
-//матрица выводится
-//первая комната - старт ,вторая -енд
-//освободить память в функции принт_ерор
-//проверить валидацию окончательно!!!
-
-void create_map(t_pointer *p);
 
 void print_results(t_pointer *p) {
 	t_room *room;
@@ -67,30 +61,6 @@ void	check_name(char *s, t_pointer *p)
 	p->info->map[counter[1]][counter[0]] = 'X';
 }
 
-void	handle_path(t_room *room, t_pointer *p, char *s)
-{
-	int		i;
-
-	create_map(p);
-	check_name(s, p);
-	realloc_2d_array(p->info,s);
-	while (get_next_line(0, &s) > 0)
-	{
-		p->line = s;
-		if (s[0] == '#')
-		{
-			if (!ft_strncmp("##", s, 2))
-				print_error("ERROR: rule", p);
-		}
-		else
-			check_name(s, p);
-		realloc_2d_array(p->info, s);
-	}
-	i = 0;
-	while (i < p->info->size)
-		printf("%s\n", p->info->file[i++]);
-	print_results(p);
-}
 //map of distance
 void create_map(t_pointer *p)
 {
@@ -115,3 +85,29 @@ void create_map(t_pointer *p)
 	}
 
 }
+
+void	handle_path(t_room *room, t_pointer *p, char *s)
+{
+	int		i;
+
+	create_map(p);
+	check_name(s, p);
+	realloc_2d_array(p->info,s);
+	while (get_next_line(0, &s) > 0)
+	{
+		p->line = s;
+		if (s[0] == '#')
+		{
+			if (!ft_strncmp("##", s, 2))
+				print_error("ERROR: rule", p);
+		}
+		else
+			check_name(s, p);
+		realloc_2d_array(p->info, s);
+	}
+	i = 0;
+	while (i < p->info->size)
+		printf("%s\n", p->info->file[i++]);
+	print_results(p);
+}
+

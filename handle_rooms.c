@@ -102,6 +102,7 @@ void	handle_rooms(t_room *rooms, t_info *info, t_pointer *p)
 
 	while (get_next_line(0, &line) > 0)
 	{
+		p->line = line;
 		if (strchr(line, ' ') == NULL && strchr(line, '-') != NULL)
 			break ;
 		if (line[0] == '#')

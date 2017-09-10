@@ -17,7 +17,6 @@ void print_error(char *string, t_pointer *p)
 	exit(0);
 }
 
-
 int main()
 {
 	// init structure
@@ -26,7 +25,6 @@ int main()
 	t_pointer *p;
 	p = (t_pointer *)malloc(sizeof(t_pointer));
 	info = (t_info *)malloc(sizeof(t_info));
-	p->info = info;
 	init_info(info, p);
 	validation(info, p);
 	find_paths(p);

@@ -76,6 +76,7 @@ void	handle_path(t_room *room, t_pointer *p, char *s)
 	realloc_2d_array(p->info,s);
 	while (get_next_line(0, &s) > 0)
 	{
+		p->line = s;
 		if (s[0] == '#')
 		{
 			if (!ft_strncmp("##", s, 2))

@@ -27,9 +27,9 @@ void	lst_cmp(t_room *new, t_pointer *p)
 
 t_room	*lst_new(t_room *room, char *s, t_pointer *p)
 {
-	t_room	*new;
-	char	*tmp;
-	t_room *head;
+	t_room		*new;
+	char		*tmp;
+	t_room		*head;
 
 	tmp = s;
 	head = room;
@@ -46,7 +46,7 @@ t_room	*lst_new(t_room *room, char *s, t_pointer *p)
 	new->next = NULL;
 	if (p->info->s_e[0] == 1 || p->info->s_e[1] == 1)
 	{
-		(p->info->s_e[0] == 1) ? (new->coord[2] = 1) : (new->coord[2] = 2);
+		new->coord[2] = (p->info->s_e[0] == 1) ? 1 : 2;
 		(p->info->s_e[0] == 1) ? (p->info->s_e[0] = 2) : (p->info->s_e[1] = 2);
 		new->next = room;
 		return (new);

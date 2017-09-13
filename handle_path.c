@@ -12,7 +12,6 @@
 
 #include "lem_in.h"
 
-
 void print_results(t_pointer *p) {
 	t_room *room;
 	int i = 0;

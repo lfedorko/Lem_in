@@ -19,14 +19,15 @@ void print_error(char *string, t_pointer *p)
 
 int main()
 {
-	// init structure
 	t_info *info;
-	//t_room *room;
 	t_pointer *p;
+	t_room	*rooms;
+
 	p = (t_pointer *)malloc(sizeof(t_pointer));
 	info = (t_info *)malloc(sizeof(t_info));
 	init_info(info, p);
-	validation(info, p);
+	number_of_ants(info, p, 0);
+	handle_rooms(rooms, info, p);
 	find_paths(p);
 	free(info);
 

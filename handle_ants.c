@@ -31,10 +31,9 @@ void	realloc_2d_array(t_info *info, char *line)
 	free(line);
 }
 
-void	number_of_ants(t_info *info, t_pointer *p)
+void	number_of_ants(t_info *info, t_pointer *p, int i)
 {
 	char	*line;
-	int		i;
 
 	line = NULL;
 	i = 0;
@@ -59,12 +58,4 @@ void	number_of_ants(t_info *info, t_pointer *p)
 	}
 	if (line == NULL)
 		print_error("ERROR: empty file", p);
-}
-
-void	validation(t_info *info, t_pointer *p)
-{
-	t_room	*rooms;
-
-	number_of_ants(info, p);
-	handle_rooms(rooms, info, p);
 }

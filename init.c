@@ -17,5 +17,5 @@ void init_info(t_info *info, t_pointer *p)
 	p->info = info;
 	p->room = NULL;
 	p->line = NULL;
-
+	p->path = NULL;
 }

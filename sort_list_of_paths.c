@@ -1,6 +1,5 @@
 #include "lem_in.h"
 
-//sort
 int create_used(int *road, char *used)
 {
 	int i;
@@ -18,12 +17,12 @@ int create_used(int *road, char *used)
 		used[road[i]] = '1';
 	return (1);
 }
-//sort
+
 void sort_unique(t_pointer *p, char *used)
 {
 	t_path *list;
 	t_path *tmp;
-	t_path *prev; //cтарый
+	t_path *prev;
 
 	prev = NULL;
 	list = p->path;
@@ -38,8 +37,6 @@ void sort_unique(t_pointer *p, char *used)
 	}
 }
 
-
-// sort list
 void sort_littlebig(t_pointer *p)
 {
 	t_path *begin;
@@ -69,38 +66,3 @@ void sort_littlebig(t_pointer *p)
 	}
 }
 
-//sort
-void delete_node(t_pointer *p, t_path *list, t_path *prev)
-{
-	if (prev == NULL)
-		p->path = list->next;
-	else
-		prev->next = list->next;
-	free(list->road);
-	free(list);
-}
-//sort
-void sort_roads(t_pointer *p)
-{
-	t_path *list;
-	t_path *tmp;
-	t_path *prev; //cтарый
-	int i;
-
-	prev = NULL;
-	list = p->path;
-	while (list) {
-		tmp = list->next;
-		i = 0;
-		while (list->road[i] != 1 && i < p->info->room)
-			i++;
-		if (list->road[i] != 1)
-			delete_node(p, list, prev);
-		else
-		{
-			prev = list;
-			list->len = i;
-		}
-		list = tmp;
-	}
-}

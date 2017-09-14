@@ -20,26 +20,24 @@ void print_lists(t_pointer *p)
 void find_paths(t_pointer *p)
 {
 	char *used;
-	t_path *path;
-	int i = 0;
-	t_path *tmp;
+	int  *tmp_path;
+	int i;
 
-	path = (t_path *)malloc(sizeof(t_path));
-	path->road = (int *)ft_memalloc(sizeof(int) * p->info->room);
+	i = 0;
+	tmp_path = (int *)ft_memalloc(sizeof(int) * p->info->room);
 	used = ft_strnew(p->info->room);
-	p->path = path;
-	path->next = NULL;
 	used = memset(used, '0', p->info->room);
-	dfs(0, 1, used, p, path->road);//дописать массив с путями
-	if (path->road[0] == 0)
+	while (i < p->info->room)
+		printf("%d ", tmp_path[i++]);
+
+	dfs(0, 0, used, tmp_path, p);//дописать массив с путями
+	free(tmp_path);
+	if (p->path == NULL)
 		print_error("ERROR: no roads", p);
 	printf("ALL ROADS:\n");
 	print_lists(p);
-	printf("SORT ROADS\n");
-	sort_roads(p);
 	if (p->path == NULL)
 		print_error("ERROR: no connected roads", p);
-	print_lists(p);
 	printf("SORT little big ROADS\n");
 	sort_littlebig(p);
 	print_lists(p);

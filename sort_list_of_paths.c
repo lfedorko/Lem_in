@@ -1,8 +1,8 @@
 #include "lem_in.h"
 
-int create_used(int *road, char *used)
+int		create_used(int *road, char *used)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (road[i] != 1)
@@ -10,7 +10,7 @@ int create_used(int *road, char *used)
 		if (used[road[i]] == '0')
 			i++;
 		else
-			return 0;
+			return (0);
 	}
 	i = -1;
 	while (road[++i] != 1)
@@ -18,11 +18,11 @@ int create_used(int *road, char *used)
 	return (1);
 }
 
-void sort_unique(t_pointer *p, char *used)
+void	sort_unique(t_pointer *p, char *used)
 {
-	t_path *list;
-	t_path *tmp;
-	t_path *prev;
+	t_path	*list;
+	t_path	*tmp;
+	t_path	*prev;
 
 	prev = NULL;
 	list = p->path;
@@ -37,15 +37,15 @@ void sort_unique(t_pointer *p, char *used)
 	}
 }
 
-void sort_littlebig(t_pointer *p)
+void	sort_littlebig(t_pointer *p)
 {
-	t_path *begin;
-	t_path *tmp;
-	int *array;
-	int tmp_len;
+	t_path	*begin;
+	t_path	*tmp;
+	int		*array;
+	int		tmp_len;
 
 	begin = p->path;
-	tmp  = p->path->next;
+	tmp = p->path->next;
 	while (tmp)
 	{
 		while (tmp != begin)
@@ -66,3 +66,12 @@ void sort_littlebig(t_pointer *p)
 	}
 }
 
+void	delete_node(t_pointer *p, t_path *list, t_path *prev)
+{
+	if (prev == NULL)
+		p->path = list->next;
+	else
+		prev->next = list->next;
+	free(list->road);
+	free(list);
+}

@@ -12,7 +12,8 @@ void print_error(char *string, t_pointer *p)
 	while (i < p->info->size)
 		free(p->info->file[i++]);
 	free(p->info);
-	/* add room  free linked list */
+	free(p->info->used);
+	/* add room  and path free linked list */
 	free(p);
 	exit(0);
 }

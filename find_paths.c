@@ -2,6 +2,8 @@
 
 void connect_room(t_pointer *p);
 
+void create_ant_positon(t_pointer *p);
+
 void print_lists(t_pointer *p)
 {
 	t_path *tmp;
@@ -34,6 +36,19 @@ void connect_room(t_pointer *p)
 		tmp = tmp->next;
 	}
 }
+void create_ant_positon(t_pointer *p)
+{
+	t_path *tmp;
+
+	tmp = p->path;
+	while (tmp)
+	{
+		tmp->position = (int *)ft_memalloc(sizeof(int) * tmp->len);
+		tmp = tmp->next;
+		p->info->proper_paths++;
+	}
+	printf("proper ways = %d\n",p->info->proper_paths);
+}
 
 //dfs
 void find_paths(t_pointer *p)
@@ -51,8 +66,6 @@ void find_paths(t_pointer *p)
 	dfs(0, 0, tmp_path, p);//дописать массив с путями
 	if (p->path == NULL)
 		print_error("ERROR: no roads", p);
-	if (p->path == NULL)
-		print_error("ERROR: no connected roads", p);
 //------------------------------------------------
 	printf("\nALL ROADS:\n");
 	print_lists(p);
@@ -60,12 +73,12 @@ void find_paths(t_pointer *p)
 	sort_littlebig(p);
 	print_lists(p);
 	printf("SORT NOT DEPENDED  ROADS\n");
-	//printf("used = %s\n", p->info->used );
-	sort_unique(p, p->info->used );
+	printf("used = %s\n", p->info->used );
+	sort_unique(p, p->info->used);
 	print_lists(p);
 //-------------------------------------------------
 	connect_room(p);
+	create_ant_positon(p);
 
 
 }
-

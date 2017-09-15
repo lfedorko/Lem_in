@@ -71,6 +71,7 @@ set(SOURCE_FILES
         handle_ants.c
         init.c handle_path.c handle_rooms.c find_paths.c
         dfs.c
-        sort_list_of_paths.c)
+        sort_list_of_paths.c
+        algo.c)
 
 add_executable(lem_in ${SOURCE_FILES})

@@ -7,7 +7,8 @@ SRC = main.c handle_ants.c init.c libft/get_next_line.c \
 	handle_path.c \
 	find_paths.c \
 	dfs.c \
-	sort_list_of_paths.c
+	sort_list_of_paths.c \
+	algo.c
 
 OBJECTS = $(SRC:.c=.o)
 

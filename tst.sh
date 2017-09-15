@@ -31,7 +31,7 @@ echo "${COL2}OK${ESC}\n strange room names 34_m.txt"
 echo "-------------------------------------------"
 
 echo "${COL2}OK${ESC}\n hell of a lot of comments and commands 35_comments.txt"
-./lem-in < maps/35_comments.txt
+#./lem-in < maps/35_comments.txt
 echo "-------------------------------------------"
 
 echo "${COL}WRONG${ESC}\n no ants 2_m.txt" 

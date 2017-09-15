@@ -1,5 +1,7 @@
 #include "lem_in.h"
 
+void connect_room(t_pointer *p);
+
 void print_lists(t_pointer *p)
 {
 	t_path *tmp;
@@ -16,12 +18,28 @@ void print_lists(t_pointer *p)
 	}
 }
 
+void connect_room(t_pointer *p)
+{
+	int i;
+	t_room *tmp;
+
+	i = 0;
+	tmp = p->room;
+	p->info->conn = (t_room **)malloc(sizeof(t_room *) * p->info->room + 1);
+	p->info->conn[p->info->room] = NULL;
+	while (tmp && i < p->info->room)
+	{
+		p->info->conn[i] = tmp;
+		i++;
+		tmp = tmp->next;
+	}
+}
+
 //dfs
 void find_paths(t_pointer *p)
 {
 	int  *tmp_path;
 	int i;
-	int start[2];
 
 	i = 0;
 	tmp_path = (int *)ft_memalloc(sizeof(int) * p->info->room);
@@ -33,15 +51,21 @@ void find_paths(t_pointer *p)
 	dfs(0, 0, tmp_path, p);//дописать массив с путями
 	if (p->path == NULL)
 		print_error("ERROR: no roads", p);
-	printf("ALL ROADS:\n");
 	if (p->path == NULL)
 		print_error("ERROR: no connected roads", p);
+//------------------------------------------------
+	printf("\nALL ROADS:\n");
 	print_lists(p);
 	printf("SORT little big ROADS\n");
 	sort_littlebig(p);
 	print_lists(p);
 	printf("SORT NOT DEPENDED  ROADS\n");
-	printf("used = %s\n", p->info->used );
+	//printf("used = %s\n", p->info->used );
 	sort_unique(p, p->info->used );
 	print_lists(p);
+//-------------------------------------------------
+	connect_room(p);
+
+
 }
+

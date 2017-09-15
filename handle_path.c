@@ -97,7 +97,7 @@ void	handle_path(t_room *room, t_pointer *p, char *s)
 		p->line = s;
 		if (s[0] == '#')
 		{
-			if (!ft_strncmp("##", s, 2))
+			if (!ft_strcmp("##end", s) || !ft_strcmp("##start", s))
 				print_error("ERROR: rule", p);
 		}
 		else

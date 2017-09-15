@@ -79,6 +79,4 @@ void find_paths(t_pointer *p)
 //-------------------------------------------------
 	connect_room(p);
 	create_ant_positon(p);
-
-
 }

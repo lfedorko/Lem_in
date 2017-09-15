@@ -42,7 +42,7 @@ void	number_of_ants(t_info *info, t_pointer *p, int i)
 		p->line = line;
 		if (line[0] == '#')
 		{
-			if (line[1] == '#')
+			if (!ft_strcmp("##end", line) || !ft_strcmp("##start", line))
 				print_error("ERROR: rules before amount of ants", p);
 		}
 		else

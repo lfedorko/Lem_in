@@ -113,8 +113,6 @@ void	handle_rooms(t_room *rooms, t_info *info, t_pointer *p)
 				info->s_e[0] = 1;
 			else if (!ft_strcmp("##end", line) && info->s_e[1] == 0)
 				info->s_e[1] = 1;
-			else if (line[1] == '#')
-				print_error("ERROR: wrong rule", p);
 			else if (info->s_e[0] == 1 || info->s_e[1] == 1)
 				print_error("ERROR: no room after rule", p);
 		}

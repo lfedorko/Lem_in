@@ -47,16 +47,19 @@ t_room	*lst_new(t_room *room, char *s, t_pointer *p)
 	if (p->info->s_e[0] == 1 || p->info->s_e[1] == 1)
 	{
 		new->coord[2] = (p->info->s_e[0] == 1) ? 1 : 2;
-		(p->info->s_e[0] == 1) ? (p->info->s_e[0] = 2) : (p->info->s_e[1] = 2);
+		 if (p->info->s_e[0] == 1)
+			 p->info->s_e[0] = 2;
+		 else
+			 p->info->s_e[1] = 2;
 		new->next = room;
 		return (new);
 	}
+	new->coord[2] = 0;
 	if (room == NULL)
 		return (new);
 	while (room->next != NULL)
 		room = room->next;
 	room->next = new;
-	new->coord[2] = 0;
 	return (head);
 }
 
@@ -116,14 +119,14 @@ void	handle_rooms(t_room *rooms, t_info *info, t_pointer *p)
 			else if (info->s_e[0] == 1 || info->s_e[1] == 1)
 				print_error("ERROR: no room after rule", p);
 			else if ((!ft_strcmp("##start", line) && info->s_e[0] == 2) ||
-				(!ft_strcmp("##end", line) && info->s_e[0] == 2))
+				(!ft_strcmp("##end", line) && info->s_e[1] == 2))
 				print_error("ERROR: start/end already exist", p);
 		}
 		else
 			rooms = add_handle_rooms(rooms, info, line, p);
 		realloc_2d_array(info, line);
 	}
-	if (info->s_e[0] != info->s_e[1])
+	if (info->s_e[0] != 2 || info->s_e[1] != 2)
 		print_error("ERROR: no start or end", p);
 	handle_path(rooms, p, line);
 }

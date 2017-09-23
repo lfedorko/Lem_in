@@ -44,10 +44,12 @@ void create_ant_positon(t_pointer *p)
 	while (tmp)
 	{
 		tmp->position = (int *)ft_memalloc(sizeof(int) * tmp->len);
+		if (p->info->p_p[1] < tmp->len)
+			p->info->p_p[1] = tmp->len;
+		p->info->p_p[0]++;
 		tmp = tmp->next;
-		p->info->proper_paths++;
 	}
-	printf("proper ways = %d\n",p->info->proper_paths);
+	printf("proper ways = %d longest way %d\n",p->info->p_p[0], p->info->p_p[1]);
 }
 
 //dfs

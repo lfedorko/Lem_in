@@ -74,10 +74,10 @@ void	check_digit(char *s, t_pointer *p)
 		if (s[i] == ' ' && ft_isdigit(s[i + 1]))
 			counter++;
 	if (counter != 2)
-		print_error("ERROR:1 incorrect room", p);
+		print_error("ERROR: incorrect room", p);
 	i = 0;
 	if (s[i] == 'L')
-		print_error("ERROR: 2 incorrect room", p);
+		print_error("ERROR:  incorrect name of room", p);
 	while (s[i] != ' ')
 		i++;
 	i++;

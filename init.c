@@ -5,6 +5,16 @@
 
 #include "lem_in.h"
 
+
+void one_move(t_pointer *p)
+{
+	int i;
+
+	i = 1;
+	while(i <= p->info->ants)
+		printf("\033[;33mL%d-%s\033[33;0m ",i++, p->info->conn[1]->name);
+
+}
 void init_info(t_info *info, t_pointer *p)
 {
 	info->ants = 0;

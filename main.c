@@ -30,7 +30,7 @@ int main()
 	number_of_ants(info, p, 0);
 	handle_rooms(rooms, info, p);
 	find_paths(p);
-	move(p);
+	p->path->len == 1 ? one_move(p) : move(p);
 	free(info);
 
 	return (0);

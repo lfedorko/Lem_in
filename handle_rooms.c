@@ -5,52 +5,54 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: lfedorko <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/08/18 17:03:29 by lfedorko          #+#    #+#             */
-/*   Updated: 2017/08/18 17:03:33 by lfedorko         ###   ########.fr       */
+/*   Created: 2017/09/25 16:27:28 by lfedorko          #+#    #+#             */
+/*   Updated: 2017/09/25 16:27:29 by lfedorko         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lem_in.h"
 
-void	lst_cmp(t_room *new, t_pointer *p)
+t_room	*lst_cmp(t_room *new, t_pointer *p, char *s)
 {
-	while (p->room != NULL)
+	char	*tmp;
+	t_room	*tmp_room;
+
+	tmp = s;
+	tmp_room = p->room;
+	new = (t_room *)malloc(sizeof(t_room));
+	new->next = NULL;
+	tmp = ft_strchr(tmp, ' ');
+	new->name = ft_strsub(s, 0, tmp - s);
+	new->coord[0] = ft_atoi(tmp);
+	tmp++;
+	tmp = ft_strchr(tmp, ' ');
+	new->coord[1] = ft_atoi(tmp);
+	while (tmp_room != NULL)
 	{
-		if (!ft_strcmp(p->room->name, new->name))
+		if (!ft_strcmp(tmp_room->name, new->name))
 			print_error("ERROR: same name", p);
-		if (new->coord[0] == p->room->coord[0]
-			&& new->coord[1] == p->room->coord[1])
+		if (new->coord[0] == tmp_room->coord[0]
+			&& new->coord[1] == tmp_room->coord[1])
 			print_error("ERROR: same coord", p);
-		p->room = p->room->next;
+		tmp_room = tmp_room->next;
 	}
+	return (new);
 }
 
 t_room	*lst_new(t_room *room, char *s, t_pointer *p)
 {
 	t_room		*new;
-	char		*tmp;
 	t_room		*head;
 
-	tmp = s;
 	head = room;
-	new = (t_room *)malloc(sizeof(t_room));
-	while (*tmp != ' ')
-		tmp++;
-	new->name = ft_strsub(s, 0, tmp - s);
-	new->coord[0] = ft_atoi(tmp);
-	tmp++;
-	while (*tmp != ' ')
-		tmp++;
-	new->coord[1] = ft_atoi(tmp);
-	lst_cmp(new, p);
-	new->next = NULL;
+	new = lst_cmp(new, p, s);
 	if (p->info->s_e[0] == 1 || p->info->s_e[1] == 1)
 	{
-		new->coord[2] = (p->info->s_e[0] == 1) ? 1 : 2;
-		 if (p->info->s_e[0] == 1)
-			 p->info->s_e[0] = 2;
-		 else
-			 p->info->s_e[1] = 2;
+		new->coord[2] = (p->info->s_e[0] == 1 ? 1 : 2);
+		if (p->info->s_e[0] == 1)
+			p->info->s_e[0] = 2;
+		else
+			p->info->s_e[1] = 2;
 		new->next = room;
 		return (new);
 	}
@@ -86,6 +88,10 @@ void	check_digit(char *s, t_pointer *p)
 	i++;
 	while (s[i] != '\0')
 		(ft_isdigit(s[i])) ? i++ : print_error("ERROR: invalid coord", p);
+	i = -1;
+	while (s[++i])
+		if (s[i] == '-')
+			print_error("ERROR: incorrect name (-)", p);
 }
 
 t_room	*add_handle_rooms(t_room *room, t_info *info, char *s, t_pointer *p)
@@ -101,32 +107,29 @@ t_room	*add_handle_rooms(t_room *room, t_info *info, char *s, t_pointer *p)
 
 void	handle_rooms(t_room *rooms, t_info *info, t_pointer *p)
 {
-	char	*line;
-
-	while (get_next_line(0, &line) > 0)
+	while (get_next_line(0, &(p->line)) > 0)
 	{
-		p->line = line;
-		if (strchr(line, ' ') == NULL && strchr(line, '-') != NULL)
+		if (strchr(p->line, ' ') == NULL && strchr(p->line, '-') != NULL)
 			break ;
-		if (line[0] == '#')
+		if (p->line[0] == '#')
 		{
 			if (info->s_e[0] == 1 || info->s_e[1] == 1)
 				print_error("ERROR: no room after rule", p);
-			else if (!ft_strcmp("##start", line) && info->s_e[0] == 0)
+			else if (!ft_strcmp("##start", p->line) && info->s_e[0] == 0)
 				info->s_e[0] = 1;
-			else if (!ft_strcmp("##end", line) && info->s_e[1] == 0)
+			else if (!ft_strcmp("##end", p->line) && info->s_e[1] == 0)
 				info->s_e[1] = 1;
-			else if (info->s_e[0] == 1 || info->s_e[1] == 1)
-				print_error("ERROR: no room after rule", p);
-			else if ((!ft_strcmp("##start", line) && info->s_e[0] == 2) ||
-				(!ft_strcmp("##end", line) && info->s_e[1] == 2))
+			else if ((!ft_strcmp("##start", p->line) && info->s_e[0] == 2) ||
+				(!ft_strcmp("##end", p->line) && info->s_e[1] == 2))
 				print_error("ERROR: start/end already exist", p);
 		}
 		else
-			rooms = add_handle_rooms(rooms, info, line, p);
-		realloc_2d_array(info, line);
+			rooms = add_handle_rooms(rooms, info, p->line, p);
+		realloc_2d_array(info, p->line);
+		p->line = NULL;
 	}
-	if (info->s_e[0] != 2 || info->s_e[1] != 2)
-		print_error("ERROR: no start or end", p);
-	handle_path(rooms, p, line);
+	if (p->line == NULL)
+		print_error("ERROR: no link", p);
+	(info->s_e[0] != 2 || info->s_e[1] != 2) ?
+	print_error("ERROR: no start/end", p) : handle_path(rooms, p);
 }

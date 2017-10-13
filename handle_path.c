@@ -12,67 +12,47 @@
 
 #include "lem_in.h"
 
-void print_results(t_pointer *p) {
-	t_room *room;
-	int i = 0;
-
-	room = p->room;
-	printf("ants = %d, rooms = %d\n", p->info->ants, p->info->room);
-	while (room != NULL) {
-		printf("name%s  start/end = %d\n", room->name, room->coord[2]);
-		room = room->next;
-	}
-
-	while (i < p->info->room) {
-		printf("%s\n", p->info->map[i]);
-		i++;
-	}
-}
-
-void	check_name(char *s, t_pointer *p)
+int		check_name(t_pointer *p, char *tmp, char *new)
 {
 	t_room	*test;
-	char	*tmp;
-	char	*new;
-	int    counter[3];
+	int		counter[3];
 
 	counter[2] = 0;
 	counter[0] = -1;
 	counter[1] = -1;
-		tmp = s;
-	while (*tmp != '-')
-		tmp++;
-	new = ft_strsub(s, 0, tmp - s);
-	tmp++;
+	if ((tmp = ft_strchr(p->line, '-')) == NULL)
+		return (1);
+	new = ft_strsub(p->line, 0, tmp - p->line);
 	test = p->room;
-	while (test != NULL)
+	while (test)
 	{
 		if (!ft_strcmp(new, test->name))
 			counter[0] = counter[2];
-		if (!ft_strcmp(tmp, test->name))
+		if (!ft_strcmp(tmp + 1, test->name))
 			counter[1] = counter[2];
 		counter[2]++;
 		test = test->next;
 	}
+	free(new);
 	if (counter[0] == -1 || counter[1] == -1)
-		print_error("ERROR: incorrect connections", p);
+		return (1);
 	p->info->map[counter[0]][counter[1]] = 'X';
 	p->info->map[counter[1]][counter[0]] = 'X';
+	return (0);
 }
 
-//map of distance
-void create_map(t_pointer *p)
+void	create_map(t_pointer *p)
 {
 	t_room	*second;
-	int 	i;
+	int		i;
 
 	i = 0;
 	p->info->map = (char **)malloc(sizeof(char *) * p->info->room + 1);
 	p->info->map[p->info->room] = NULL;
-	while(i < p->info->room)
+	while (i < p->info->room)
 	{
 		p->info->map[i] = ft_strnew(p->info->room);
-		ft_memset(p->info->map[i], '0',p->info->room);
+		ft_memset(p->info->map[i], '0', p->info->room);
 		i++;
 	}
 	if (p->room->coord[2] == 2)
@@ -82,31 +62,33 @@ void create_map(t_pointer *p)
 		second->next = p->room;
 		p->room = second;
 	}
-
 }
 
-void	handle_path(t_room *room, t_pointer *p, char *s)
+void	handle_path(t_room *room, t_pointer *p)
 {
-	int		i;
+	char	*tmp;
+	char	*new;
 
 	create_map(p);
-	check_name(s, p);
-	realloc_2d_array(p->info,s);
-	while (get_next_line(0, &s) > 0)
+	(check_name(p, tmp, new)) ? print_error("ERROR : no link", p) :
+	realloc_2d_array(p->info, p->line);
+	while (get_next_line(0, &(p->line)) > 0)
 	{
-		p->line = s;
-		if (s[0] == '#')
+		if (p->line[0] == '#')
 		{
-			if (!ft_strcmp("##end", s) || !ft_strcmp("##start", s))
+			if (!ft_strcmp("##end", p->line) || !ft_strcmp("##start", p->line))
 				print_error("ERROR: rule", p);
 		}
 		else
-			check_name(s, p);
-		realloc_2d_array(p->info, s);
+		{
+			if (check_name(p, tmp, new))
+			{
+				free(p->line);
+				p->line = NULL;
+				break ;
+			}
+		}
+		realloc_2d_array(p->info, p->line);
+		p->line = NULL;
 	}
-	i = 0;
-	while (i < p->info->size)
-		printf("%s\n", p->info->file[i++]);
-	print_results(p);
 }
-

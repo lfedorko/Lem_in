@@ -2,7 +2,7 @@ NAME = lem-in
 
 CFLAGS = -Wall -Wextra -Werror
 
-SRC = main.c handle_ants.c init.c libft/get_next_line.c \
+SRC = main.c handle_ants.c init.c get_next_line.c \
 	handle_rooms.c \
 	handle_path.c \
 	find_paths.c \
@@ -12,20 +12,20 @@ SRC = main.c handle_ants.c init.c libft/get_next_line.c \
 
 OBJECTS = $(SRC:.c=.o)
 
-LIB = ./libft/
+LIB = ./src_lib/
 
-LIB_INC = ./libft/libft.h
+PRINTF_INC = ./src_lib/ft_printf/ft_printf.h
 
-all: $(LIB)libft.a $(NAME)
+all: $(LIB)libftprintf.a $(NAME)
 
 $(NAME):  $(OBJECTS)
-	@gcc $(OBJECTS) $(LIB)libft.a -o $(NAME)
+	@gcc $(OBJECTS) $(LIB)libftprintf.a -o $(NAME)
 	@echo "\033[34mLem in ready!\033[0m"
 
 %.o: %.c
 	@gcc -c $< -o $@
 
-$(LIB)libft.a:
+$(LIB)libftprintf.a:
 	@make -C $(LIB)
 
 clean:
